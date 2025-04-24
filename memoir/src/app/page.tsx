@@ -32,7 +32,7 @@ export default function Home() {
             </Typography>
 
             <Typography variant="body1" className="pb-8 text-lg sm:text-xl" style={{ fontSize: '2rem' }}>
-              A memory board built just for <b>Mish</b> & <b>Riv</b> — to share love, laughter, and timeless moments from afar 💌
+              A memory board built just for <span className="italic font-bold">Mish</span> & <span className="italic font-bold">Riv</span> — to share love, laughter, and timeless moments from afar 💌
             </Typography>
 
             
