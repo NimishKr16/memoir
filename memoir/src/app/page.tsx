@@ -4,7 +4,7 @@ import { Button, Typography, Container } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FloatingHearts from './components/floatingHearts';
 import { motion } from 'framer-motion';
-
+import Footer from './components/Footer';
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
 
@@ -48,6 +48,8 @@ export default function Home() {
           </Container>
         </motion.div>
       )}
+      
     </div>
+    
   );
 }
