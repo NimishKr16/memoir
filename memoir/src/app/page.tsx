@@ -4,10 +4,10 @@ import { Button, Typography, Container } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FloatingHearts from './components/floatingHearts';
 import { motion } from 'framer-motion';
-import Footer from './components/Footer';
+import { useRouter } from 'next/navigation';
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -40,7 +40,9 @@ export default function Home() {
                 variant="contained"
                 color="primary"
                 size="large"
+                onClick={() => router.push('/memoir')}
                 endIcon={<FavoriteIcon />}
+                sx={{ fontSize: '1.25rem' }}
                 className="!bg-[#f2ebdf] !text-[#540707] hover:!bg-[#e5dcca]"
               >
                 Start Sharing Memories
