@@ -8,10 +8,20 @@ interface PolaroidCardProps {
   date?: string; // Add the date field
 }
 
+
 const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageSrc, caption, date }) => {
   // Extract the month from the date
   const month = date ? new Date(date).toLocaleString('default', { month: 'long' }) : '';
 
+  const formatMonthYear = (dateString: string) => {
+    const date = new Date(dateString);
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      year: '2-digit',
+    });
+    return formatter.format(date); // ➔ "Apr '25"
+  };
+  
   return (
     <Card sx={{ backgroundColor: '#f7d5d6' }} className="relative w-72 bg-pink-500 rounded-lg shadow-xl p-4 m-4 overflow-hidden">
       {/* Thumbtack icon */}
@@ -35,7 +45,7 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageSrc, caption, date }) 
       {/* Month display with typewriter font */}
       {month && (
         <div className="text-center font-mono font-bold text-xl text-gray-600 -mb-4">
-          {month}
+          {formatMonthYear(date || '')}
         </div>
       )}
 

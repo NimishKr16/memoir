@@ -34,9 +34,10 @@ export default function MemoirPage() {
 
       // Sort memories by month in increasing order
       const sortedMemories = memories.sort((a, b) => {
-        const monthA = new Date(a.date).getMonth(); // Get month from date
-        const monthB = new Date(b.date).getMonth(); // Get month from date
-        return monthA - monthB; // Sort in ascending order of month
+        // const monthA = new Date(a.date).getMonth(); // Get month from date
+        // const monthB = new Date(b.date).getMonth(); // Get month from date
+        // return monthA - monthB; // Sort in ascending order of month
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
 
       setMemories(sortedMemories);
@@ -57,6 +58,15 @@ export default function MemoirPage() {
       damping: 25,
       duration: 0.8,
     },
+  };
+
+  const formatMonthYear = (dateString: string) => {
+    const date = new Date(dateString);
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      year: '2-digit',
+    });
+    return formatter.format(date); // ➔ "Apr '25"
   };
 
   return (
