@@ -1,10 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import FallingPetals from "../components/FallingPetals";
-import PolaroidCard from "../components/Polariod";
 import UploadButton from "../components/UploadButton";
 import { useEffect, useState } from "react";
-import { fetchMemories } from "@/lib/fetchMemories";
 import Loader from "react-js-loader";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
@@ -99,11 +97,11 @@ export default function MemoirPage() {
             <>
               <div className="flex flex-col items-center justify-center text-center mt-40 space-y-4">
                 <div className="text-4xl sm:text-5xl font-extrabold text-pink-300 animate-bounce">
-                  Begin Your Journey 💖
+                  Begin Our Journey 💖
                 </div>
-                <p className="text-lg sm:text-xl text-pink-200 max-w-md">
-                  Your love story deserves to be remembered. 📸 <br />
-                  Add your first beautiful memory together!
+                <p className="text-xl sm:text-xl text-pink-200 max-w-md">
+                  Our love story deserves to be remembered. 📸 <br />
+                  Add our first beautiful memory together!
                 </p>
                 <div className="w-16 h-1 bg-pink-300 rounded-full mt-4 animate-pulse" />
               </div>
