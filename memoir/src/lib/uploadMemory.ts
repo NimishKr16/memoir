@@ -1,19 +1,20 @@
 // src/lib/uploadMemory.ts
 import { db } from './firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-
+import { uploadToCloudinary } from './uploadToCloud';
 // Function to upload memory with Base64 image data
 export const uploadMemory = async (
-  image: string,  // Base64 image data
+  image: File,  // Base64 image data
   caption: string,
   date: string
 ): Promise<void> => {
   try {
     // Save the memory with base64 image data in Firestore
+    const imageUrl = await uploadToCloudinary(image);
     await addDoc(collection(db, 'memories'), {
       caption,
       date,
-      imageBase64: image,  // Save image as Base64
+      imageUrl,  // Save image as Base64
       createdAt: serverTimestamp(),
     });
   } catch (error) {

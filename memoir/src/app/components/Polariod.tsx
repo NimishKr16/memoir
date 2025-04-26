@@ -5,11 +5,15 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 interface PolaroidCardProps {
   imageSrc?: string;
   caption?: string;
+  date?: string; // Add the date field
 }
 
-const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageSrc, caption }) => {
+const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageSrc, caption, date }) => {
+  // Extract the month from the date
+  const month = date ? new Date(date).toLocaleString('default', { month: 'long' }) : '';
+
   return (
-    <Card sx={{ backgroundColor: '#f7d5d6' }} className="relative w-72 bg-pink-500 rounded-lg shadow-lg p-4 m-4">
+    <Card sx={{ backgroundColor: '#f7d5d6' }} className="relative w-72 bg-pink-500 rounded-lg shadow-xl p-4 m-4 overflow-hidden">
       {/* Thumbtack icon */}
       <div className="absolute top-2 z-50 left-2 text-xl text-red-600">
         <FavoriteIcon />
@@ -28,10 +32,17 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageSrc, caption }) => {
         )}
       </div>
 
-      {/* Caption area, reduced height */}
+      {/* Month display with typewriter font */}
+      {month && (
+        <div className="text-center font-mono font-bold text-xl text-gray-600 -mb-4">
+          {month}
+        </div>
+      )}
+
+      {/* Caption with marker-like font */}
       {caption && (
-        <CardContent className="text-center text-gray-800 p-2">
-          {caption}
+        <CardContent className="text-center text-gray-800 -mb-6">
+          <p className="font-permanent-marker text-xl">{caption}</p>
         </CardContent>
       )}
     </Card>

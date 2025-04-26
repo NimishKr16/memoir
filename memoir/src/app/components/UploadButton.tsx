@@ -14,7 +14,7 @@ const UploadButton: React.FC = () => {
           style={{ fontSize: '2rem', backgroundColor: '#6e0202' }}
           onClick={() => setOpen(true)}
         >
-          <AddPhotoAlternateIcon sx={{ fontSize: '2.5rem', color: 'black' }} />
+          <AddPhotoAlternateIcon sx={{ fontSize: '2.5rem', color: 'pink' }} />
         </IconButton>
       </div>
 
