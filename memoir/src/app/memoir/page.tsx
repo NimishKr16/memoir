@@ -111,7 +111,7 @@ export default function MemoirPage() {
       )}
 
       {/* Upload Button positioned at the bottom, mobile responsive */}
-      <div className="fixed bottom-8 left-1/2 z-100 transform -translate-x-1/2 sm:mb-12 md:mt-8 mb-6">
+      <div className="fixed bottom-8 left-1/2 z-100 transform -translate-x-1/2 sm:mb-12 md:mt-8 mb-10">
         <UploadButton />
       </div>
     </div>
