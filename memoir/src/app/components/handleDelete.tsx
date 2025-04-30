@@ -19,7 +19,6 @@ interface DeleteConfirmModalProps {
 }
 
 const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ open, onClose, onConfirm }) => {
-  const theme = useTheme();
 
   return (
     <Dialog open={open} onClose={onClose}>
