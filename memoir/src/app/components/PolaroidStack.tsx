@@ -49,9 +49,7 @@ const PolaroidStack: React.FC<PolaroidStackProps> = ({ month, memories }) => {
             transition={{ type: 'spring', stiffness: 80, damping: 18 }}
           >
             <PolaroidCard
-              imageSrc={memory.imageUrl}
-              caption={memory.caption}
-              date={memory.date}
+               memory={memory}
             />
           </motion.div>
         ))}
