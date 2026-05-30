@@ -7,7 +7,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { uploadMemory } from "@/lib/uploadMemory";
 import toast from "react-hot-toast";
@@ -30,25 +30,9 @@ const RomanticDialogTitle = styled(DialogTitle)(() => ({
 
 const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
   const [image, setImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const [date, setDate] = useState("");
   const wordCount = caption.trim().split(/\s+/).length;
-
-  useEffect(() => {
-    if (!image) {
-      setPreviewUrl(null);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(image);
-    setPreviewUrl(objectUrl);
-
-    return () => {
-      URL.revokeObjectURL(objectUrl);
-    };
-  }, [image]);
-
   const handleUpload = async () => {
     if (!image || !caption || !date) {
       toast.error("Please fill in all the fields ✨", {
@@ -63,6 +47,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
     }
 
     try {
+      // Await the upload + Firestore write and show toast
       await toast.promise(
         uploadMemory(image, caption, date),
         {
@@ -84,28 +69,23 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
         },
       );
 
+      // Close the modal after success
       onClose();
+    } catch (err) {
+      console.error("Upload failed:", err);
+      // Allow toast to show the error; keep modal open for retry
+    } finally {
+      // Reset the state after upload attempt
       setImage(null);
       setCaption("");
       setDate("");
-    } catch (err) {
-      console.error("Upload failed:", err);
-      return;
     }
-  };
-
-  const handleClose = () => {
-    setImage(null);
-    setPreviewUrl(null);
-    setCaption("");
-    setDate("");
-    onClose();
   };
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       fullWidth
       maxWidth="sm"
       PaperProps={{ className: "bg-[#f5b0dc] text-[#f2ebdf] rounded-2xl p-4" }}
@@ -115,18 +95,12 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
         <label className="cursor-pointer mt-2 flex flex-col items-center justify-center border-2 border-dashed border-[#f2ebdf] rounded-xl p-6 bg-[#6e0202] hover:bg-[#7d0202] transition duration-300 ease-in-out text-[#f2ebdf] text-center">
           {image ? (
             <div className="w-full h-full flex flex-col items-center justify-center">
-              {previewUrl ? (
-                <img
-                  src={previewUrl}
-                  alt="Image Preview"
-                  className="w-36 h-36 object-cover mb-2 rounded-md shadow-lg border border-[#f2ebdf]/30"
-                />
-              ) : (
-                <div className="w-36 h-36 mb-2 rounded-md border border-dashed border-[#f2ebdf]/40 flex items-center justify-center text-sm text-[#f2ebdf] bg-[#7d0202] px-3 text-center">
-                  Preview unavailable for this file type
-                </div>
-              )}
-              <span className="text-lg font-medium">Image Selected!</span>
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Image Preview"
+                className="w-32 h-32 object-cover mb-2 rounded-md"
+              />
+              <span className="text-lg font-medium">Image Uploaded!</span>
             </div>
           ) : (
             <span className="text-lg font-medium">Add a Memory 📸</span>
@@ -171,7 +145,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
       </DialogContent>
       <DialogActions className="flex justify-between px-6 pb-4">
         <Button
-          onClick={handleClose}
+          onClick={onClose}
           className="!text-[#540707] hover:!bg-[#f2ebdf]"
         >
           Cancel

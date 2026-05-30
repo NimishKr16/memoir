@@ -8,9 +8,9 @@ const UploadButton: React.FC = () => {
 
   return (
     <>
-      <div className="fixed bottom-4 left-0 right-0 z-[9999] flex justify-center pointer-events-none sm:bottom-8">
+      <div className="flex items-center justify-center">
         <IconButton
-          className="pointer-events-auto text-white rounded-full shadow-lg p-3 hover:bg-pink-600 transition-all ease-in-out duration-300"
+          className="text-white rounded-full shadow-lg p-3 hover:bg-pink-600 transition-all ease-in-out duration-300"
           style={{ fontSize: "2rem", backgroundColor: "#6e0202" }}
           onClick={() => setOpen(true)}
         >

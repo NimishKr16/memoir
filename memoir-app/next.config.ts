@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  turbopack: {
+    root: "/Users/nimish/Desktop/Coding/memoir/memoir-app",
+  },
 };
 
 export default nextConfig;
