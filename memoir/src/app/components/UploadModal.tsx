@@ -7,7 +7,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { uploadMemory } from "@/lib/uploadMemory";
 import toast from "react-hot-toast";
@@ -30,20 +30,24 @@ const RomanticDialogTitle = styled(DialogTitle)(() => ({
 
 const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
   const [image, setImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const [date, setDate] = useState("");
   const wordCount = caption.trim().split(/\s+/).length;
 
-  const convertToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result as string); // Base64 string
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file); // Read as Base64
-    });
-  };
+  useEffect(() => {
+    if (!image) {
+      setPreviewUrl(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(image);
+    setPreviewUrl(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [image]);
 
   const handleUpload = async () => {
     if (!image || !caption || !date) {
@@ -59,11 +63,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
     }
 
     try {
-      // Convert the image to Base64
-      const base64Image = await convertToBase64(image);
-
-      // Upload the memory with Base64 image data
-      toast.promise(
+      await toast.promise(
         uploadMemory(image, caption, date),
         {
           loading: "Saving your memory... 💌",
@@ -81,25 +81,31 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
             primary: "#f2ebdf",
             secondary: "#6e0202",
           },
-        }
+        },
       );
 
-      // Close the modal after success
       onClose();
-    } catch (err) {
-      console.error("Upload failed:", err);
-    } finally {
-      // Reset the state after upload
       setImage(null);
       setCaption("");
       setDate("");
+    } catch (err) {
+      console.error("Upload failed:", err);
+      return;
     }
+  };
+
+  const handleClose = () => {
+    setImage(null);
+    setPreviewUrl(null);
+    setCaption("");
+    setDate("");
+    onClose();
   };
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       fullWidth
       maxWidth="sm"
       PaperProps={{ className: "bg-[#f5b0dc] text-[#f2ebdf] rounded-2xl p-4" }}
@@ -109,12 +115,18 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
         <label className="cursor-pointer mt-2 flex flex-col items-center justify-center border-2 border-dashed border-[#f2ebdf] rounded-xl p-6 bg-[#6e0202] hover:bg-[#7d0202] transition duration-300 ease-in-out text-[#f2ebdf] text-center">
           {image ? (
             <div className="w-full h-full flex flex-col items-center justify-center">
-              <img
-                src={URL.createObjectURL(image)}
-                alt="Image Preview"
-                className="w-32 h-32 object-cover mb-2 rounded-md"
-              />
-              <span className="text-lg font-medium">Image Uploaded!</span>
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  alt="Image Preview"
+                  className="w-36 h-36 object-cover mb-2 rounded-md shadow-lg border border-[#f2ebdf]/30"
+                />
+              ) : (
+                <div className="w-36 h-36 mb-2 rounded-md border border-dashed border-[#f2ebdf]/40 flex items-center justify-center text-sm text-[#f2ebdf] bg-[#7d0202] px-3 text-center">
+                  Preview unavailable for this file type
+                </div>
+              )}
+              <span className="text-lg font-medium">Image Selected!</span>
             </div>
           ) : (
             <span className="text-lg font-medium">Add a Memory 📸</span>
@@ -159,7 +171,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ open, onClose }) => {
       </DialogContent>
       <DialogActions className="flex justify-between px-6 pb-4">
         <Button
-          onClick={onClose}
+          onClick={handleClose}
           className="!text-[#540707] hover:!bg-[#f2ebdf]"
         >
           Cancel

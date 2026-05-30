@@ -10,9 +10,10 @@ export const uploadToCloudinary = async (file: File): Promise<string> => {
     });
   
     if (!res.ok) {
-      throw new Error('Cloudinary upload failed');
+      const errorText = await res.text();
+      throw new Error(`Cloudinary upload failed (${res.status}): ${errorText}`);
     }
   
     const data = await res.json();
-    return data.secure_url; // ✅ The image URL
+    return data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/'); // browser-safe delivery URL
   };
